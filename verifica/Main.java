@@ -8,7 +8,7 @@ public class Main{
 	public static void main(String[]args) throws InterruptedException {
 		Random generatore = new Random(System.currentTimeMillis());
 		Cliente[] clienti = new Cliente[];
-		System.out.println("Generazione passegeri");
+		System.out.println("Clienti");
 		
 		for(int i=0; i<MAX_CLIENTI_IN_ATTESA; i++){
 			for(int j=i;j<sleep(randomNum(1,4));&&i<MAX_CLIENTI_IN_ATTESA){
@@ -20,7 +20,7 @@ public class Main{
 			sleep(12000);
 		}
 		Pizzeria daPeppiniello = new Pizzeria("da Peppiniello");
-		for(int i=0; i<NUMERO_FERMATE; i++){
+		for(int i=0; i<NUMERO_POSTI; i++){
 			sleep(generatore.nextInt(1000)+1000);
 			for(int j=0; j<passeggeri[i].length; j++){
 				clienti[j].interrupt();
