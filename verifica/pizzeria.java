@@ -2,41 +2,37 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.*;
 
-public class Pizzeria{
-	public static final int NUMERO_POSTI = 12;
+public class Pizzeria implements Runnable{
+	private static final int NUMERO_POSTI = 12;
 	private Lock sezioneCritica;
 	private Semaphore postiLiberi;
-	private Semaphore postiOccupati;
-	private Cliente[] clienti;
 	private String name;
+	private final int MIN = 5;
+	private final int MAX = 7;
+	private Random randomNum;
 	
 	public Pizzeria(String name){
+		this.name=name;
 		postiLiberi = new Semaphore(NUMERO_POSTI);
-		postiOccupati = new Semaphore(0);
-		sezioneCritica = new ReentrantLock();
-		clienti = new Cliente[NUMERO_POSTI];
-		this.name = name;
+		randomNum=new Random();
 	}
-	public boolean entra(Cleinte cliente){
-		int i;
-	    boolean entrato=false;
-		sezioneCritica.lock();
-		if(postiLiberi.tryAcquire()){
-		    entra=true;
-            for(i=0; clienti[i] != null; i++);
-            clienti[i] = cliente;
-			postiOccupati.release();
+	
+	@Override
+    public void run() {
+		int time = 0;
+        int entrano = 0;
+        int wait = 2;
+        int fine = 0;
+		
+		while((fine <= NUMERO_POSTI) && (time<60)) {
+            entrano = r.nextInt(NUMERO_POSTI-fine);
+            fine+=entrano;
+            for (int j = 0; j < entrano; j++) {
+                int tempo = MIN+r.nextInt(MAX-MIN);
+                new Thread(new Cliente(nomi[r.nextInt(nomi.length)]+j)).start();
+            }
+            try {Thread.sleep(wait*1000);} catch (InterruptedException ex) {}
+            time+=wait;
         }
-        sezioneCritica.unlock();
-		return entra;
-	}
-	public void esce(Cliente cliente){
-		int i;
-		sezioneCritica.lock();
-			postiOccupati.tryAcquire();
-			for(i=0; clienti[i].getName()!=cliente.getName(); i++);
-			clienti[i] = null;
-			postiLiberi.release();
-		sezioneCritica.unlock();
 	}
 }
