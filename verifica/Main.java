@@ -1,20 +1,19 @@
 import java.util.Random;
-
-import static java.lang.Thread.sleep;
+import java.lang.Thread.sleep;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.*;
 
 public class Main{
 	public static void main(String[]args){
 		Pizzeria p = new Pizzeria();
         new Thread(p).start();
 }
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.locks.*;
 
 public class Pizzeria implements Runnable{
 	private static final int NUMERO_POSTI = 12;
 	private Lock sezioneCritica;
-	private Semaphore postiLiberi;
+	protected Semaphore postiLiberi;
 	private String name;
 	private final int MIN = 5;
 	private final int MAX = 7;
@@ -45,7 +44,8 @@ public class Pizzeria implements Runnable{
 	}
 }
 
-public class Cliente implements Runnable{
+private class Cliente implements Runnable{
+	private semaphore postiLiberi;
 	private Pizzeria pizzeria;
 	
 	public Cliente(String name){
@@ -53,15 +53,15 @@ public class Cliente implements Runnable{
 	
 	public void run(){
 			try {
-				Pizzeria.postiLiberi.acquire;
+				Pizzeria.postiLiberi.acquire();
 				sleep(randomNum(1000,12000));
 			} catch (InterruptedException e) {}
 			finally{
-				Pizzeria.postiLiberi.release;
+				Pizzeria.postiLiberi.release();
 			}
 	}
 	
-	private static int randomNum(int min, int max) {
+private static int randomNum(int min, int max) {
 		Random r = new Random();
 		return r.nextInt((max - min) + 1) + min;
 	}
